@@ -86,17 +86,19 @@ _data = {
 "player_walk": SubResource("Animation_a086m")
 }
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "animation_player", "machine", "coyote_timer")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "animation_player", "machine", "coyote_timer", "jump_buffer_timer")]
 script = ExtResource("1_vdbge")
 sprite = NodePath("Sprite2D")
 animation_player = NodePath("AnimationPlayer")
 machine = NodePath("State Machine")
 coyote_timer = NodePath("CoyoteTimer")
+jump_buffer_timer = NodePath("JumpBufferTimer")
 walk_speed = 200.0
 gravity = 10.0
 jump_force = 400.0
 max_falling_speed = 2000.0
-coyote_time = 0.15
+coyote_time = 0.1
+jump_buffer_time = 0.15
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_lshtr")
@@ -127,4 +129,7 @@ libraries = {
 }
 
 [node name="CoyoteTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="JumpBufferTimer" type="Timer" parent="."]
 one_shot = true

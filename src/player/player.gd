@@ -5,6 +5,7 @@ class_name Player extends CharacterBody2D
 @export var animation_player: AnimationPlayer
 @export var machine: StateMachine
 @export var coyote_timer: Timer
+@export var jump_buffer_timer: Timer
 
 @export_group("Movement")
 @export var walk_speed: float
@@ -12,14 +13,20 @@ class_name Player extends CharacterBody2D
 @export var jump_force: float
 @export var max_falling_speed: float
 @export var coyote_time: float
+@export var jump_buffer_time: float
 
 var gravity_multiplier: float = 1.0
 
+# Game feel helper variables
 var was_on_floor: bool = true
-
+var jump_buffered: bool = false
 
 func _ready() -> void:
 	coyote_timer.wait_time = coyote_time
+	
+	jump_buffer_timer.wait_time = jump_buffer_time
+	jump_buffer_timer.timeout.connect(remove_jump_buffer)
+	
 	for state in machine.get_children():
 		state.set_player(self)
 
@@ -31,6 +38,10 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 	if was_on_floor and not is_on_floor():
 		coyote_timer.start()
+	if Input.is_action_just_pressed("up") and not is_on_floor():
+		jump_buffered = true
+		jump_buffer_timer.start()
+
 
 func handle_movement():
 	velocity.x = Input.get_axis("left", "right") * walk_speed
@@ -51,3 +62,7 @@ func start_animation(key: String) -> void:
 
 func stop_animation() -> void:
 	animation_player.stop()
+
+
+func remove_jump_buffer():
+	jump_buffered = false
