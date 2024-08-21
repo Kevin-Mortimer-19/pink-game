@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dj2b7crfic18r"]
+
+[ext_resource type="Texture2D" uid="uid://cnxdm7s48mkgv" path="res://assets/player/pink guy.png" id="1_4l1sv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_115qw"]
+atlas = ExtResource("1_4l1sv")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4irly"]
+atlas = ExtResource("1_4l1sv")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iw4ks"]
+atlas = ExtResource("1_4l1sv")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ymktj"]
+atlas = ExtResource("1_4l1sv")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_115qw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4irly")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iw4ks")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ymktj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
