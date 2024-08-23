@@ -12,6 +12,7 @@ func exit() -> void:
 
 
 func _physics_update(_delta: float) -> void:
+	player.handle_movement()
 	if player.velocity.y == 0:
 		machine.transition_to("Air")
 	if player.is_on_floor():

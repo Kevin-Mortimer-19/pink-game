@@ -6,6 +6,11 @@ class_name Player extends CharacterBody2D
 @export var machine: StateMachine
 @export var coyote_timer: Timer
 @export var jump_buffer_timer: Timer
+@export var knockback_timer: Timer
+
+@export_group("Components")
+@export var components: Node
+@export var flip: CharacterComponent
 
 @export_group("Movement")
 @export var walk_speed: float
@@ -14,6 +19,8 @@ class_name Player extends CharacterBody2D
 @export var max_falling_speed: float
 @export var coyote_time: float
 @export var jump_buffer_time: float
+@export var knockback_multiplier: float
+@export var knockback_time: float
 
 var gravity_multiplier: float = 1.0
 
@@ -27,15 +34,22 @@ func _ready() -> void:
 	jump_buffer_timer.wait_time = jump_buffer_time
 	jump_buffer_timer.timeout.connect(remove_jump_buffer)
 	
+	knockback_timer.wait_time = knockback_time
+	knockback_timer.timeout.connect(end_knockback)
+	
 	for state in machine.get_children():
 		state.set_player(self)
+	
+	for component in components.get_children():
+		component.set_character(self)
 
 
 func _physics_process(_delta: float) -> void:
+	apply_gravity()
 	flip_check()
-	handle_movement()
 	was_on_floor = is_on_floor()
 	move_and_slide()
+	
 	if was_on_floor and not is_on_floor():
 		coyote_timer.start()
 	if Input.is_action_just_pressed("up") and not is_on_floor():
@@ -43,17 +57,34 @@ func _physics_process(_delta: float) -> void:
 		jump_buffer_timer.start()
 
 
-func handle_movement():
-	velocity.x = Input.get_axis("left", "right") * walk_speed
+func apply_gravity() -> void:
 	velocity.y += gravity * gravity_multiplier
+
+
+func handle_movement() -> void:
+	velocity.x = Input.get_axis("left", "right") * walk_speed
 
 
 func flip_check() -> void:
 	var flipped = sprite.flip_h
-	if Input.is_action_just_pressed("left") and not flipped:
-		sprite.flip_h = true
-	elif Input.is_action_just_pressed("right") and flipped:
-		sprite.flip_h = false
+	if (
+			(Input.is_action_just_pressed("left") and not flipped)
+			or (Input.is_action_just_pressed("right") and flipped)
+	):
+		flip.flip()
+
+
+func hurt(src_direction: Vector2) -> void:
+	velocity = (position - src_direction) * knockback_multiplier
+	machine.transition_to("Knockback")
+	knockback_timer.start()
+
+
+func end_knockback() -> void:
+	if is_on_floor():
+		machine.transition_to("Idle")
+	else:
+		machine.transition_to("Air")
 
 
 func start_animation(key: String) -> void:
