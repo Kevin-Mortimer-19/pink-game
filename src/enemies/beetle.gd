@@ -31,13 +31,7 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 	if ray.is_colliding():
 		if ray.get_collider().is_in_group("Terrain"):
-			print("Ray")
 			turn()
-	
-	#for i in get_slide_collision_count():
-		#var collision = get_slide_collision(i)
-		#if collision.get_collider().name == "Player":
-			#damage(collision.get_collider())
 
 
 func damage(player: CharacterBody2D):
