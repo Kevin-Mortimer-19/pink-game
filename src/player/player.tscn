@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://2ujlrnvih7ur"]
+[gd_scene load_steps=19 format=3 uid="uid://2ujlrnvih7ur"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_vdbge"]
 [ext_resource type="Texture2D" uid="uid://doo3hksbax183" path="res://assets/player/blue guy.png" id="2_lshtr"]
@@ -13,6 +13,21 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u01hd"]
 radius = 5.0
 height = 16.0
+
+[sub_resource type="Animation" id="Animation_bun55"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
 
 [sub_resource type="Animation" id="Animation_0b1uw"]
 resource_name = "player_air"
@@ -63,23 +78,6 @@ tracks/0/keys = {
 "values": [5]
 }
 
-[sub_resource type="Animation" id="Animation_a086m"]
-resource_name = "player_walk"
-length = 0.8
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3]
-}
-
 [sub_resource type="Animation" id="Animation_gntp3"]
 resource_name = "player_knockback"
 loop_mode = 1
@@ -97,8 +95,10 @@ tracks/0/keys = {
 "values": [7]
 }
 
-[sub_resource type="Animation" id="Animation_bun55"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_a086m"]
+resource_name = "player_walk"
+length = 0.8
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -106,10 +106,10 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [6]
+"values": [0, 1, 2, 3]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nu270"]
@@ -122,8 +122,13 @@ _data = {
 "player_walk": SubResource("Animation_a086m")
 }
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "animation_player", "machine", "coyote_timer", "jump_buffer_timer", "knockback_timer", "components", "flip")]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xijdq"]
+radius = 6.0
+height = 18.0
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "animation_player", "machine", "coyote_timer", "jump_buffer_timer", "knockback_timer", "hitbox", "components", "flip")]
 collision_layer = 3
+collision_mask = 3
 script = ExtResource("1_vdbge")
 sprite = NodePath("Sprite2D")
 animation_player = NodePath("AnimationPlayer")
@@ -131,6 +136,7 @@ machine = NodePath("State Machine")
 coyote_timer = NodePath("CoyoteTimer")
 jump_buffer_timer = NodePath("JumpBufferTimer")
 knockback_timer = NodePath("KnockbackTimer")
+hitbox = NodePath("Hitbox")
 components = NodePath("Components")
 flip = NodePath("Components/Flip")
 walk_speed = 200.0
@@ -141,6 +147,7 @@ coyote_time = 0.1
 jump_buffer_time = 0.15
 knockback_multiplier = 20.0
 knockback_time = 0.25
+upwards_knockback = 10.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_lshtr")
@@ -184,6 +191,7 @@ one_shot = true
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -25)
 position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
@@ -193,3 +201,8 @@ drag_vertical_enabled = true
 [node name="Flip" type="Node2D" parent="Components" node_paths=PackedStringArray("sprite")]
 script = ExtResource("8_e3akt")
 sprite = NodePath("../../Sprite2D")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CapsuleShape2D_xijdq")

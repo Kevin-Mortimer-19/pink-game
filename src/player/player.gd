@@ -7,6 +7,7 @@ class_name Player extends CharacterBody2D
 @export var coyote_timer: Timer
 @export var jump_buffer_timer: Timer
 @export var knockback_timer: Timer
+@export var hitbox: Area2D
 
 @export_group("Components")
 @export var components: Node
@@ -17,10 +18,15 @@ class_name Player extends CharacterBody2D
 @export var gravity: float
 @export var jump_force: float
 @export var max_falling_speed: float
+
+@export_group("Game Feel")
 @export var coyote_time: float
 @export var jump_buffer_time: float
+
+@export_group("Knockback Physics")
 @export var knockback_multiplier: float
 @export var knockback_time: float
+@export var upwards_knockback: float
 
 var gravity_multiplier: float = 1.0
 
@@ -36,6 +42,8 @@ func _ready() -> void:
 	
 	knockback_timer.wait_time = knockback_time
 	knockback_timer.timeout.connect(end_knockback)
+	
+	hitbox.body_entered.connect(hit_detected)
 	
 	for state in machine.get_children():
 		state.set_player(self)
@@ -75,9 +83,14 @@ func flip_check() -> void:
 
 
 func hurt(src_direction: Vector2) -> void:
-	velocity = (position - src_direction) * knockback_multiplier
+	velocity = (position - src_direction - Vector2(0, upwards_knockback)) * knockback_multiplier
 	machine.transition_to("Knockback")
 	knockback_timer.start()
+
+
+func hit_detected(body: Node2D):
+	if body.is_in_group("Enemy"):
+		body.damage(self)
 
 
 func end_knockback() -> void:
