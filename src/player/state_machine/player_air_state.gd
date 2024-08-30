@@ -12,7 +12,9 @@ func exit() -> void:
 
 func _physics_update(_delta: float) -> void:
 	player.handle_movement()
-	if player.is_on_floor():
+	if Input.is_action_just_pressed("dash"):
+		machine.transition_to("Dash")
+	elif player.is_on_floor():
 		machine.transition_to("Walk")
 	elif not player.coyote_timer.is_stopped() and Input.is_action_just_pressed("up"):
 		machine.transition_to("Jump")

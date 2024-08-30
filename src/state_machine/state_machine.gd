@@ -10,6 +10,7 @@ func _ready() -> void:
 
 func _process(delta) -> void:
 	current_state._update(delta)
+	print(current_state.name)
 
 
 func _physics_process(delta) -> void:

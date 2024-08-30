@@ -7,6 +7,7 @@ class_name Player extends CharacterBody2D
 @export var coyote_timer: Timer
 @export var jump_buffer_timer: Timer
 @export var knockback_timer: Timer
+@export var dash_timer: Timer
 @export var hitbox: Area2D
 
 @export_group("Components")
@@ -18,6 +19,10 @@ class_name Player extends CharacterBody2D
 @export var gravity: float
 @export var jump_force: float
 @export var max_falling_speed: float
+
+@export_group("Dash")
+@export var dash_speed: float
+@export var dash_time: float
 
 @export_group("Game Feel")
 @export var coyote_time: float
@@ -43,6 +48,9 @@ func _ready() -> void:
 	knockback_timer.wait_time = knockback_time
 	knockback_timer.timeout.connect(end_knockback)
 	
+	dash_timer.wait_time = dash_time
+	dash_timer.timeout.connect(end_dash)
+	
 	hitbox.body_entered.connect(hit_detected)
 	
 	for state in machine.get_children():
@@ -54,7 +62,6 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	apply_gravity()
-	flip_check()
 	was_on_floor = is_on_floor()
 	move_and_slide()
 	
@@ -70,14 +77,23 @@ func apply_gravity() -> void:
 
 
 func handle_movement() -> void:
+	flip_check()
 	velocity.x = Input.get_axis("left", "right") * walk_speed
+
+func dash_movement() -> void:
+	var dir = -1 if sprite.flip_h else 1
+	velocity.x = dash_speed * dir
+
+
+func end_dash() -> void:
+	machine.transition_to("Air")
 
 
 func flip_check() -> void:
 	var flipped = sprite.flip_h
 	if (
-			(Input.is_action_just_pressed("left") and not flipped)
-			or (Input.is_action_just_pressed("right") and flipped)
+			(Input.is_action_pressed("left") and not flipped)
+			or (Input.is_action_pressed("right") and flipped)
 	):
 		flip.flip()
 

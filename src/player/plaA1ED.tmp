@@ -162,8 +162,6 @@ walk_speed = 200.0
 gravity = 10.0
 jump_force = 400.0
 max_falling_speed = 2000.0
-dash_speed = 500.0
-dash_time = 0.25
 coyote_time = 0.1
 jump_buffer_time = 0.15
 knockback_multiplier = 20.0
@@ -215,7 +213,6 @@ one_shot = true
 one_shot = true
 
 [node name="DashTimer" type="Timer" parent="."]
-process_callback = 0
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
