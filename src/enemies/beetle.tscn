@@ -44,8 +44,8 @@ _data = {
 }
 
 [node name="Beetle" type="CharacterBody2D" node_paths=PackedStringArray("animation_player", "sprite", "hitbox", "ray", "components", "flip_component") groups=["Enemy"]]
-collision_layer = 3
-collision_mask = 3
+collision_layer = 4
+collision_mask = 5
 script = ExtResource("1_doxtx")
 animation_player = NodePath("AnimationPlayer")
 sprite = NodePath("Sprite2D")
@@ -69,8 +69,8 @@ libraries = {
 }
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
-target_position = Vector2(9, 0)
-collision_mask = 7
+target_position = Vector2(12, 0)
+collision_mask = 5
 collide_with_areas = true
 
 [node name="Components" type="Node" parent="."]

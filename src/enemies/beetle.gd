@@ -30,12 +30,19 @@ func _physics_process(_delta: float) -> void:
 		velocity.y = 0
 	move_and_slide()
 	if ray.is_colliding():
-		if ray.get_collider().is_in_group("Terrain"):
+		print("Colliding")
+		var collider = ray.get_collider()
+		if collider.is_in_group("Terrain") or collider.is_in_group("Enemy"):
+			print("Turning")
 			turn()
 
 
 func damage(player: CharacterBody2D):
 	player.hurt(position)
+
+
+func hurt():
+	queue_free()
 
 
 func turn() -> void:

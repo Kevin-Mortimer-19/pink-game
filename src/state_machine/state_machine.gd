@@ -4,13 +4,16 @@ class_name StateMachine extends Node
 var current_state: State
 
 
+func get_current_state() -> String:
+	return current_state.name
+
+
 func _ready() -> void:
 	current_state = initial_state
 
 
 func _process(delta) -> void:
 	current_state._update(delta)
-	print(current_state.name)
 
 
 func _physics_process(delta) -> void:

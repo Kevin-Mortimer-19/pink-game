@@ -19,10 +19,12 @@ class_name Player extends CharacterBody2D
 @export var gravity: float
 @export var jump_force: float
 @export var max_falling_speed: float
+@export var lerp_change: float
 
 @export_group("Dash")
 @export var dash_speed: float
 @export var dash_time: float
+@export var dash_jump_power: float
 
 @export_group("Game Feel")
 @export var coyote_time: float
@@ -38,6 +40,7 @@ var gravity_multiplier: float = 1.0
 # Game feel helper variables
 var was_on_floor: bool = true
 var jump_buffered: bool = false
+
 
 func _ready() -> void:
 	coyote_timer.wait_time = coyote_time
@@ -76,9 +79,12 @@ func apply_gravity() -> void:
 	velocity.y += gravity * gravity_multiplier
 
 
-func handle_movement() -> void:
+func handle_movement(_delta: float) -> void:
 	flip_check()
-	velocity.x = Input.get_axis("left", "right") * walk_speed
+	#velocity.x = Input.get_axis("left", "right") * walk_speed
+	var endpoint = Vector2(Input.get_axis("left", "right") * walk_speed, velocity.y)
+	velocity = velocity.lerp(endpoint, lerp_change)
+
 
 func dash_movement() -> void:
 	var dir = -1 if sprite.flip_h else 1
@@ -98,15 +104,20 @@ func flip_check() -> void:
 		flip.flip()
 
 
+func hit_detected(body: Node2D):
+	if body.is_in_group("Enemy"):
+		if machine.get_current_state() == "Dash":
+			body.hurt()
+			dash_movement.call_deferred()
+			machine.transition_to("Jump")
+		else:
+			body.damage(self)
+
+
 func hurt(src_direction: Vector2) -> void:
 	velocity = (position - src_direction - Vector2(0, upwards_knockback)) * knockback_multiplier
 	machine.transition_to("Knockback")
 	knockback_timer.start()
-
-
-func hit_detected(body: Node2D):
-	if body.is_in_group("Enemy"):
-		body.damage(self)
 
 
 func end_knockback() -> void:

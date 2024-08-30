@@ -145,7 +145,7 @@ radius = 6.0
 height = 18.0
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "animation_player", "machine", "coyote_timer", "jump_buffer_timer", "knockback_timer", "dash_timer", "hitbox", "components", "flip")]
-collision_layer = 3
+collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_vdbge")
 sprite = NodePath("Sprite2D")
@@ -162,6 +162,7 @@ walk_speed = 200.0
 gravity = 10.0
 jump_force = 400.0
 max_falling_speed = 2000.0
+lerp_change = 0.25
 dash_speed = 500.0
 dash_time = 0.25
 coyote_time = 0.1
@@ -231,6 +232,8 @@ script = ExtResource("8_e3akt")
 sprite = NodePath("../../Sprite2D")
 
 [node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("CapsuleShape2D_xijdq")

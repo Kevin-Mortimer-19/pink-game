@@ -10,7 +10,7 @@ func exit() -> void:
 
 
 func _physics_update(_delta: float) -> void:
-	player.handle_movement()
+	player.handle_movement(_delta)
 	if (
 			Input.is_action_just_pressed("up") 
 			or (player.is_on_floor() and player.jump_buffered) 
