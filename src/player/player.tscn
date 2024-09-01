@@ -144,7 +144,7 @@ _data = {
 radius = 6.0
 height = 18.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "animation_player", "machine", "coyote_timer", "jump_buffer_timer", "knockback_timer", "dash_timer", "hitbox", "components", "flip")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "animation_player", "machine", "coyote_timer", "jump_buffer_timer", "knockback_timer", "dash_timer", "dash_cooldown_timer", "hitbox", "components", "flip")]
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_vdbge")
@@ -155,6 +155,7 @@ coyote_timer = NodePath("CoyoteTimer")
 jump_buffer_timer = NodePath("JumpBufferTimer")
 knockback_timer = NodePath("KnockbackTimer")
 dash_timer = NodePath("DashTimer")
+dash_cooldown_timer = NodePath("DashCooldownTimer")
 hitbox = NodePath("Hitbox")
 components = NodePath("Components")
 flip = NodePath("Components/Flip")
@@ -163,8 +164,9 @@ gravity = 10.0
 jump_force = 400.0
 max_falling_speed = 2000.0
 lerp_change = 0.25
-dash_speed = 500.0
+dash_speed = 600.0
 dash_time = 0.25
+dash_cooldown = 0.75
 coyote_time = 0.1
 jump_buffer_time = 0.15
 knockback_multiplier = 20.0
@@ -217,6 +219,9 @@ one_shot = true
 
 [node name="DashTimer" type="Timer" parent="."]
 process_callback = 0
+one_shot = true
+
+[node name="DashCooldownTimer" type="Timer" parent="."]
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]

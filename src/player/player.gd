@@ -8,6 +8,7 @@ class_name Player extends CharacterBody2D
 @export var jump_buffer_timer: Timer
 @export var knockback_timer: Timer
 @export var dash_timer: Timer
+@export var dash_cooldown_timer: Timer
 @export var hitbox: Area2D
 
 @export_group("Components")
@@ -24,7 +25,7 @@ class_name Player extends CharacterBody2D
 @export_group("Dash")
 @export var dash_speed: float
 @export var dash_time: float
-@export var dash_jump_power: float
+@export var dash_cooldown: float
 
 @export_group("Game Feel")
 @export var coyote_time: float
@@ -53,6 +54,7 @@ func _ready() -> void:
 	
 	dash_timer.wait_time = dash_time
 	dash_timer.timeout.connect(end_dash)
+	dash_cooldown_timer.wait_time = dash_cooldown
 	
 	hitbox.body_entered.connect(hit_detected)
 	
@@ -81,9 +83,12 @@ func apply_gravity() -> void:
 
 func handle_movement(_delta: float) -> void:
 	flip_check()
-	#velocity.x = Input.get_axis("left", "right") * walk_speed
 	var endpoint = Vector2(Input.get_axis("left", "right") * walk_speed, velocity.y)
 	velocity = velocity.lerp(endpoint, lerp_change)
+
+
+func can_dash():
+	return dash_cooldown_timer.is_stopped()
 
 
 func dash_movement() -> void:

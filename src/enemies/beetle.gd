@@ -30,10 +30,8 @@ func _physics_process(_delta: float) -> void:
 		velocity.y = 0
 	move_and_slide()
 	if ray.is_colliding():
-		print("Colliding")
 		var collider = ray.get_collider()
 		if collider.is_in_group("Terrain") or collider.is_in_group("Enemy"):
-			print("Turning")
 			turn()
 
 

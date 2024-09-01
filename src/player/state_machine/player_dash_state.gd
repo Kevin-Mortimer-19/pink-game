@@ -10,6 +10,7 @@ func enter(_msg: Dictionary) -> void:
 
 
 func exit() -> void:
+	player.dash_cooldown_timer.start()
 	player.stop_animation()
 	player.flip_check()
 	player.set_collision_mask_value(2, true)
