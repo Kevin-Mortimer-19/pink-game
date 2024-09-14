@@ -3,9 +3,8 @@ extends PlayerState
 
 func enter(_msg: Dictionary) -> void:
 	player.start_animation("player_jump")
-	player.velocity.y = -player.jump_force
+	player.velocity.y = -player.bounce_strength
 	player.gravity_multiplier = 1.0
-	player.play_sfx(player.jump_sfx)
 
 
 func exit() -> void:

@@ -10,6 +10,7 @@ class_name Player extends CharacterBody2D
 @export var dash_timer: Timer
 @export var dash_cooldown_timer: Timer
 @export var hitbox: Area2D
+@export var sfx_player: AudioStreamPlayer
 
 @export_group("Components")
 @export var components: Node
@@ -26,6 +27,7 @@ class_name Player extends CharacterBody2D
 @export var dash_speed: float
 @export var dash_time: float
 @export var dash_cooldown: float
+@export var bounce_strength: float
 
 @export_group("Game Feel")
 @export var coyote_time: float
@@ -35,6 +37,9 @@ class_name Player extends CharacterBody2D
 @export var knockback_multiplier: float
 @export var knockback_time: float
 @export var upwards_knockback: float
+
+@export_group("Sound Effects")
+@export var jump_sfx: AudioStream
 
 var gravity_multiplier: float = 1.0
 
@@ -114,7 +119,7 @@ func hit_detected(body: Node2D):
 		if machine.get_current_state() == "Dash":
 			body.hurt()
 			dash_movement.call_deferred()
-			machine.transition_to("Jump")
+			machine.transition_to("Bounce")
 		else:
 			body.damage(self)
 
@@ -142,3 +147,8 @@ func stop_animation() -> void:
 
 func remove_jump_buffer():
 	jump_buffered = false
+
+
+func play_sfx(sound: AudioStream) -> void:
+	sfx_player.stream = sound
+	sfx_player.play()

@@ -1,6 +1,7 @@
-[gd_scene load_steps=21 format=3 uid="uid://2ujlrnvih7ur"]
+[gd_scene load_steps=23 format=3 uid="uid://2ujlrnvih7ur"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_vdbge"]
+[ext_resource type="AudioStream" uid="uid://c8jm6kdl8ius0" path="res://assets/sfx/jump.wav" id="2_d8kv0"]
 [ext_resource type="Texture2D" uid="uid://doo3hksbax183" path="res://assets/player/blue guy.png" id="2_lshtr"]
 [ext_resource type="Script" path="res://src/state_machine/state_machine.gd" id="3_3hg4h"]
 [ext_resource type="Script" path="res://src/player/state_machine/player_idle_state.gd" id="4_1r6v4"]
@@ -10,6 +11,7 @@
 [ext_resource type="Script" path="res://src/player/state_machine/player_knockback_state.gd" id="8_6kge5"]
 [ext_resource type="Script" path="res://src/components/FlipComponent.gd" id="8_e3akt"]
 [ext_resource type="Script" path="res://src/player/state_machine/player_dash_state.gd" id="9_edwfj"]
+[ext_resource type="Script" path="res://src/player/state_machine/player_bounce_state.gd" id="11_a4nx8"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u01hd"]
 radius = 5.0
@@ -144,7 +146,7 @@ _data = {
 radius = 6.0
 height = 18.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "animation_player", "machine", "coyote_timer", "jump_buffer_timer", "knockback_timer", "dash_timer", "dash_cooldown_timer", "hitbox", "components", "flip")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite", "animation_player", "machine", "coyote_timer", "jump_buffer_timer", "knockback_timer", "dash_timer", "dash_cooldown_timer", "hitbox", "sfx_player", "components", "flip")]
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_vdbge")
@@ -157,6 +159,7 @@ knockback_timer = NodePath("KnockbackTimer")
 dash_timer = NodePath("DashTimer")
 dash_cooldown_timer = NodePath("DashCooldownTimer")
 hitbox = NodePath("Hitbox")
+sfx_player = NodePath("SFX")
 components = NodePath("Components")
 flip = NodePath("Components/Flip")
 walk_speed = 200.0
@@ -167,11 +170,13 @@ lerp_change = 0.25
 dash_speed = 600.0
 dash_time = 0.25
 dash_cooldown = 0.75
+bounce_strength = 500.0
 coyote_time = 0.1
 jump_buffer_time = 0.15
 knockback_multiplier = 20.0
 knockback_time = 0.25
 upwards_knockback = 10.0
+jump_sfx = ExtResource("2_d8kv0")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_lshtr")
@@ -202,6 +207,9 @@ script = ExtResource("8_6kge5")
 
 [node name="Dash" type="Node" parent="State Machine"]
 script = ExtResource("9_edwfj")
+
+[node name="Bounce" type="Node" parent="State Machine"]
+script = ExtResource("11_a4nx8")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -242,3 +250,5 @@ collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("CapsuleShape2D_xijdq")
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
