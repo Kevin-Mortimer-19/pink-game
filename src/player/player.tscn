@@ -1,15 +1,16 @@
-[gd_scene load_steps=23 format=3 uid="uid://2ujlrnvih7ur"]
+[gd_scene load_steps=24 format=3 uid="uid://2ujlrnvih7ur"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_vdbge"]
 [ext_resource type="AudioStream" uid="uid://c8jm6kdl8ius0" path="res://assets/sfx/jump.wav" id="2_d8kv0"]
 [ext_resource type="Texture2D" uid="uid://doo3hksbax183" path="res://assets/player/blue guy.png" id="2_lshtr"]
 [ext_resource type="Script" path="res://src/state_machine/state_machine.gd" id="3_3hg4h"]
+[ext_resource type="AudioStream" uid="uid://ca2m3dgr5gvre" path="res://assets/sfx/dash3.wav" id="3_r0ok7"]
 [ext_resource type="Script" path="res://src/player/state_machine/player_idle_state.gd" id="4_1r6v4"]
 [ext_resource type="Script" path="res://src/player/state_machine/player_walk_state.gd" id="5_cqgbh"]
 [ext_resource type="Script" path="res://src/player/state_machine/player_jump_state.gd" id="6_6ew8k"]
 [ext_resource type="Script" path="res://src/player/state_machine/player_air_state.gd" id="6_6l8mg"]
 [ext_resource type="Script" path="res://src/player/state_machine/player_knockback_state.gd" id="8_6kge5"]
-[ext_resource type="Script" path="res://src/components/FlipComponent.gd" id="8_e3akt"]
+[ext_resource type="Script" path="res://src/components/Flip.gd" id="8_e3akt"]
 [ext_resource type="Script" path="res://src/player/state_machine/player_dash_state.gd" id="9_edwfj"]
 [ext_resource type="Script" path="res://src/player/state_machine/player_bounce_state.gd" id="11_a4nx8"]
 
@@ -177,6 +178,7 @@ knockback_multiplier = 20.0
 knockback_time = 0.25
 upwards_knockback = 10.0
 jump_sfx = ExtResource("2_d8kv0")
+dash_sfx = ExtResource("3_r0ok7")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_lshtr")
@@ -252,3 +254,4 @@ collision_mask = 4
 shape = SubResource("CapsuleShape2D_xijdq")
 
 [node name="SFX" type="AudioStreamPlayer" parent="."]
+max_polyphony = 4

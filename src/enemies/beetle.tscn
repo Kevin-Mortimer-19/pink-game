@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bv2nyis0p0jla"]
+[gd_scene load_steps=10 format=3 uid="uid://bv2nyis0p0jla"]
 
-[ext_resource type="Script" path="res://src/enemies/beetle.gd" id="1_doxtx"]
+[ext_resource type="Script" path="res://src/enemies/enemy.gd" id="1_doxtx"]
 [ext_resource type="Texture2D" uid="uid://b30ikyfwcmlid" path="res://assets/enemies/beetle.png" id="2_uiw7l"]
-[ext_resource type="Script" path="res://src/components/FlipComponent.gd" id="3_hw6id"]
+[ext_resource type="AudioStream" uid="uid://cd3xi6bc8yfpy" path="res://assets/sfx/enemy_hit.wav" id="2_yb3hk"]
+[ext_resource type="Script" path="res://src/components/Flip.gd" id="3_hw6id"]
+[ext_resource type="Script" path="res://src/components/Obstacle.gd" id="5_8yl7l"]
+[ext_resource type="Script" path="res://src/components/WalkingEnemy.gd" id="6_vecx7"]
 
 [sub_resource type="Animation" id="Animation_3elwk"]
 length = 0.001
@@ -43,7 +46,7 @@ _data = {
 "beetle_walk": SubResource("Animation_6sjgt")
 }
 
-[node name="Beetle" type="CharacterBody2D" node_paths=PackedStringArray("animation_player", "sprite", "hitbox", "ray", "components", "flip_component") groups=["Enemy"]]
+[node name="Beetle" type="CharacterBody2D" node_paths=PackedStringArray("animation_player", "sprite", "hitbox", "ray", "sfx_player", "components", "flip_component", "obstacle_component", "move_component") groups=["Enemy"]]
 collision_layer = 4
 collision_mask = 5
 script = ExtResource("1_doxtx")
@@ -51,10 +54,15 @@ animation_player = NodePath("AnimationPlayer")
 sprite = NodePath("Sprite2D")
 hitbox = NodePath("CollisionPolygon2D")
 ray = NodePath("RayCast2D")
+sfx_player = NodePath("SFX")
 speed = 50.0
 gravity = 10.0
 components = NodePath("Components")
 flip_component = NodePath("Components/Flip")
+obstacle_component = NodePath("Components/Obstacle")
+move_component = NodePath("Components/WalkingEnemy")
+animation_name = "beetle_walk"
+hurt_sfx = ExtResource("2_yb3hk")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-8, 8, -8, -1, -4, -2, -1, -2, -1, -6, 8, -6, 8, -4, 7, -3, 5, -2, 5, 3, 4, 8)
@@ -78,3 +86,11 @@ collide_with_areas = true
 [node name="Flip" type="Node2D" parent="Components" node_paths=PackedStringArray("sprite")]
 script = ExtResource("3_hw6id")
 sprite = NodePath("../../Sprite2D")
+
+[node name="Obstacle" type="Node2D" parent="Components"]
+script = ExtResource("5_8yl7l")
+
+[node name="WalkingEnemy" type="Node2D" parent="Components"]
+script = ExtResource("6_vecx7")
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]

@@ -3,6 +3,7 @@ extends PlayerState
 
 func enter(_msg: Dictionary) -> void:
 	player.start_animation("player_dash")
+	EventBus.play_sfx.emit(player.dash_sfx)
 	player.velocity.y = 0
 	player.gravity_multiplier = 0
 	player.dash_timer.start()

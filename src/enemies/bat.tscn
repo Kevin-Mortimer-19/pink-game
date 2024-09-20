@@ -1,0 +1,91 @@
+[gd_scene load_steps=10 format=3 uid="uid://bvrpwofd8163b"]
+
+[ext_resource type="Script" path="res://src/enemies/enemy.gd" id="1_b2plu"]
+[ext_resource type="Texture2D" uid="uid://d2c5jq6fapenq" path="res://assets/enemies/bat.png" id="1_urx6m"]
+[ext_resource type="AudioStream" uid="uid://cd3xi6bc8yfpy" path="res://assets/sfx/enemy_hit.wav" id="2_jkqxw"]
+[ext_resource type="Script" path="res://src/components/Flip.gd" id="4_obk5q"]
+[ext_resource type="Script" path="res://src/components/Obstacle.gd" id="5_vjy13"]
+[ext_resource type="Script" path="res://src/components/FlyingEnemy.gd" id="6_onwh1"]
+
+[sub_resource type="Animation" id="Animation_el03l"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_d1o2b"]
+resource_name = "bat_idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.45, 0.5, 0.95),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l0nkb"]
+_data = {
+"RESET": SubResource("Animation_el03l"),
+"bat_idle": SubResource("Animation_d1o2b")
+}
+
+[node name="Bat" type="CharacterBody2D" node_paths=PackedStringArray("animation_player", "sprite", "hitbox", "ray", "sfx_player", "components", "flip_component", "obstacle_component", "move_component") groups=["Enemy"]]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_b2plu")
+animation_player = NodePath("AnimationPlayer")
+sprite = NodePath("Sprite2D")
+hitbox = NodePath("CollisionPolygon2D2")
+ray = NodePath("RayCast2D")
+sfx_player = NodePath("SFX")
+speed = 100.0
+components = NodePath("Components")
+flip_component = NodePath("Components/Flip")
+obstacle_component = NodePath("Components/Obstacle")
+move_component = NodePath("Components/FlyingEnemy")
+animation_name = "bat_idle"
+hurt_sfx = ExtResource("2_jkqxw")
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(3, -7, 7, -5, 7, -2, 0, 5, -3, 5, -8, -2, -8, -5, -2, -7)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_urx6m")
+hframes = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_l0nkb")
+}
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(12, 0)
+
+[node name="SFX" type="AudioStreamPlayer" parent="."]
+
+[node name="Components" type="Node" parent="."]
+
+[node name="Flip" type="Node2D" parent="Components" node_paths=PackedStringArray("sprite")]
+script = ExtResource("4_obk5q")
+sprite = NodePath("../../Sprite2D")
+
+[node name="Obstacle" type="Node2D" parent="Components"]
+script = ExtResource("5_vjy13")
+
+[node name="FlyingEnemy" type="Node2D" parent="Components"]
+script = ExtResource("6_onwh1")

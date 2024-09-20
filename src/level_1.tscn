@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=4 uid="uid://dumstmleae8l0"]
+[gd_scene load_steps=5 format=4 uid="uid://dumstmleae8l0"]
 
 [ext_resource type="PackedScene" uid="uid://2ujlrnvih7ur" path="res://src/player/player.tscn" id="1_tilxj"]
 [ext_resource type="TileSet" uid="uid://cnrw7n0ol4soy" path="res://src/tiles/basic_terrain.tres" id="2_2wddj"]
 [ext_resource type="PackedScene" uid="uid://bv2nyis0p0jla" path="res://src/enemies/beetle.tscn" id="3_ti2tp"]
+[ext_resource type="PackedScene" uid="uid://bvrpwofd8163b" path="res://src/enemies/bat.tscn" id="4_uvpnl"]
 
 [node name="Level 1" type="Node2D"]
 
@@ -24,3 +25,7 @@ position = Vector2(-16, 168)
 
 [node name="Player" parent="." instance=ExtResource("1_tilxj")]
 position = Vector2(48, 120)
+
+[node name="Bat" parent="." instance=ExtResource("4_uvpnl")]
+position = Vector2(184, 72)
+start_flipped = true

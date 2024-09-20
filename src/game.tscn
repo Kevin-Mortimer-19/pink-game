@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cn66qwfsmpl3q"]
+[gd_scene load_steps=4 format=3 uid="uid://cn66qwfsmpl3q"]
 
 [ext_resource type="Texture2D" uid="uid://1pcll62qpx2q" path="res://assets/backgrounds/sunset.png" id="1_ohqgb"]
 [ext_resource type="PackedScene" uid="uid://dumstmleae8l0" path="res://src/level_1.tscn" id="1_se6te"]
+[ext_resource type="PackedScene" uid="uid://b3r3kf5h0o1ij" path="res://src/audio/SFX_player.tscn" id="3_d8xxj"]
 
 [node name="Game" type="Control"]
 layout_mode = 3
@@ -32,3 +33,5 @@ texture = ExtResource("1_ohqgb")
 
 [node name="Level 1" parent="SubViewportContainer/SubViewport" instance=ExtResource("1_se6te")]
 scale = Vector2(2, 2)
+
+[node name="SFXPlayer" parent="." instance=ExtResource("3_d8xxj")]

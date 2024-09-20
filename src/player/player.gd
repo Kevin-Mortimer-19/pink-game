@@ -40,6 +40,7 @@ class_name Player extends CharacterBody2D
 
 @export_group("Sound Effects")
 @export var jump_sfx: AudioStream
+@export var dash_sfx: AudioStream
 
 var gravity_multiplier: float = 1.0
 
